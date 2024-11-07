@@ -126,3 +126,20 @@ header h4 {
     height: auto;
     float: right;
 }
+
+.arrow-list {
+    list-style: none; /* Remove default bullets */
+    padding-left: 0; /* Remove default padding */
+}
+
+.arrow-list li {
+    position: relative; /* Position relative to add custom bullet */
+    padding-left: 20px; /* Space for the arrow */
+}
+
+.arrow-list li::before {
+    content: "→"; /* Arrow icon */
+    position: absolute; /* Position it absolutely */
+    left: 0; /* Align it to the left */
+    color: #000; /* Change color as needed */
+}
