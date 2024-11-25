@@ -1,4 +1,5 @@
-@keyframes typing {
+@layer utilities {
+  @keyframes typing {
     0% { content: "a"; }
     2% { content: "ap"; }
     4% { content: "app"; }
@@ -14,16 +15,13 @@
     43% { content: "curriculu"; }
     45%, 98% { content: "curriculums"; }
     100% { content: "curriculums"; }
-}
+  }
 
-.typing-text::before {
-    content: "";
-    animation: typing 3s infinite;
-    border-right: 2px solid theme('colors.text');
-    padding-right: 4px;
-}
+  .typing-animation {
+    @apply before:content-[''] before:border-r-2 before:border-text before:pr-1 before:animate-typing;
+  }
 
-@keyframes bounce {
+  @keyframes bounce {
     from, to {
       transform: translateY(0);
     }
@@ -31,3 +29,4 @@
       transform: translateY(-5px);
     }
   }
+}

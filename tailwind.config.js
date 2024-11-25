@@ -9,11 +9,13 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: '#89B6A5',
-          hover: '#7AA596'
+          hover: '#7AA596',
+          light: 'rgb(137 182 165 / 0.1)'
         },
         secondary: {
           DEFAULT: '#F4D03F',
-          hover: '#E5C130'
+          hover: '#E5C130',
+          light: 'rgb(244 208 63 / 0.1)'
         },
         text: {
           DEFAULT: '#F2D4D7',
@@ -36,7 +38,10 @@ module.exports = {
       },
       animation: {
         'bounce-slow': 'bounce 1s infinite',
-        typing: 'typing 3s infinite'
+        'typing': 'typing 3s infinite'
+      },
+      spacing: {
+        'section': '10vh 10vw'
       }
     },
   },
