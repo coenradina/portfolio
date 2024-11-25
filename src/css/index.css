@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-white text-text;
+  }
+  body {
+    @apply bg-white text-dark;
+  }
+}
+
+@layer components {
+  .nav-link {
+    @apply text-[#F4D03F] hover:text-[#89B6A5] transition-colors duration-200;
+  }
+  
+  .card-base {
+    @apply flex flex-col items-center justify-center p-6 bg-[#4F4F4F] rounded-lg border border-[#89B6A5] hover:border-[#F4D03F] hover:scale-105 transition-all duration-200;
+  }
+  
+  .section-title {
+    @apply text-4xl font-regular text-[#2C2C2C];
+  }
+  
+  .explore-link {
+    @apply flex items-center p-4 bg-[#2C2C2C] rounded-lg border border-[#89B6A5] hover:border-[#F4D03F] transition-all duration-200;
+  }
+}
+
+header {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 10vw 0 10vw;
+}
+
+h1 {
+    font-size: 2em;
+    /* Adjust the font size for your name */
+    margin-bottom: 0.5rem;
+    /* Add some space below the name */
+}
+
+
+#scroll-down-arrow {
+    margin-top: 100px;
+    width: 32px;
+    height: auto;
+    cursor: pointer;
+    animation: bounce infinite alternate 1s ease-in-out;
+}
+
+@keyframes bounce {
+    from,
+    to {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+#about {
+    background-color: #eee;
+    height: auto;
+    padding: 10vh 10vw 10vh 10vw;
+}
+
+.about-title {
+    display: inline-flex;
+    justify-content:center;
+}
+
+.line {
+    width: 30vw;
+    height: auto;
+}
+
+.about-text {
+   width: 20vw;
+}
+
+.about-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#about-paragraph {
+    height: auto;
+    margin: 0 auto;
+    float: left;
+    text-align: justify;
+    line-height: 170%;
+    justify-items: center;
+    font-size: 1rem;
+    padding-right: 10vw;
+}
+
+#about-photo {
+    width: 30vw;
+    height: auto;
+    float: right;
+}
+
+.arrow-list {
+    list-style: none; /* Remove default bullets */
+    padding-left: 0; /* Remove default padding */
+}
+
+.arrow-list li {
+    position: relative; /* Position relative to add custom bullet */
+    padding-left: 20px; /* Space for the arrow */
+}
+
+.arrow-list li::before {
+    content: "→"; /* Arrow icon */
+    position: absolute; /* Position it absolutely */
+    left: 0; /* Align it to the left */
+    color: #000; /* Change color as needed */
+}
