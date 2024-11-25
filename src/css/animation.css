@@ -17,8 +17,11 @@
     100% { content: "curriculums"; }
   }
 
-  .typing-animation {
-    @apply before:content-[''] before:border-r-2 before:border-text before:pr-1 before:animate-typing;
+  .typing-text::after {  /* Changed from before: to after: */
+    content: '';
+    border-right: 2px solid;
+    animation: typing 3s infinite;
+    @apply text-secondary;
   }
 
   @keyframes bounce {
