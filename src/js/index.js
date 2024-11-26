@@ -112,6 +112,10 @@ function initColorSwitcher() {
             const newColor = this.dataset.color;
             const newColorRGB = hexToRGB(newColor);
             
+            // Create darker text color by mixing with black
+            const darkerColor = createDarkerColor(newColorRGB, 0.7); // 70% darker
+            const slightlyDarkerColor = createDarkerColor(newColorRGB, 0.4); // 40% darker
+            
             // Create dynamic styles for the color theme
             const styleSheet = document.createElement('style');
             styleSheet.textContent = `
@@ -132,8 +136,16 @@ function initColorSwitcher() {
                     box-shadow: 0 8px 32px rgba(var(--theme-primary-rgb), 0.15);
                 }
                 
+                #projects .section-title {
+                    color: ${slightlyDarkerColor};
+                }
+                
                 #projects h3 {
-                    color: ${newColor};
+                    color: ${darkerColor};
+                }
+                
+                #projects p {
+                    color: ${darkerColor};
                 }
                 
                 #projects .explore-link {
@@ -144,16 +156,16 @@ function initColorSwitcher() {
                 #projects .explore-link:hover {
                     background-color: transparent;
                     border-color: ${newColor};
-                    color: ${newColor};
+                    color: ${darkerColor};
                 }
                 
                 #projects .explore-link:hover svg {
-                    color: ${newColor};
+                    color: ${darkerColor};
                 }
                 
                 #projects .px-2.py-1.bg-background-dark {
                     background-color: rgba(var(--theme-primary-rgb), 0.1);
-                    color: ${newColor};
+                    color: ${darkerColor};
                 }
             `;
             
@@ -179,13 +191,18 @@ function initColorSwitcher() {
 
 // Helper function to convert hex to RGB
 function hexToRGB(hex) {
-    // Remove the # if present
     hex = hex.replace('#', '');
-    
-    // Convert to RGB values
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
-    
     return { r, g, b };
+}
+
+// Helper function to create darker color
+function createDarkerColor(rgb, darknessFactor) {
+    // Mix the color with black based on the darkness factor
+    const r = Math.round(rgb.r * (1 - darknessFactor));
+    const g = Math.round(rgb.g * (1 - darknessFactor));
+    const b = Math.round(rgb.b * (1 - darknessFactor));
+    return `rgb(${r}, ${g}, ${b})`;
 }
