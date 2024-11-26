@@ -296,43 +296,41 @@ class GravityWords {
   }
 
   createHeaderBoundaries() {
-    // Get header elements
-    const headerText = document.querySelector('h1');
-    const arrow = document.querySelector('.scroll-arrow'); // Update this selector as needed
+    // Get all header elements
+    const headerTitle = document.querySelector('h1');
+    const headerSubtext = document.querySelector('.header-subtext'); // Add class to your "I build..." text
+    const arrow = document.querySelector('.scroll-arrow');
     
-    if (headerText) {
-      const headerRect = headerText.getBoundingClientRect();
-      const headerBody = Matter.Bodies.rectangle(
-        headerRect.x + headerRect.width/2,
-        headerRect.y + headerRect.height/2,
-        headerRect.width,
-        headerRect.height,
-        {
-          isStatic: true,
-          restitution: 0.7,
-          friction: 0.2,
-          render: { visible: false }
+    const createBoundary = (element) => {
+        if (element) {
+            const rect = element.getBoundingClientRect();
+            // Add some padding around the text
+            const padding = 10;
+            const boundaryBody = Matter.Bodies.rectangle(
+                rect.x + rect.width/2,
+                rect.y + rect.height/2,
+                rect.width + padding * 2,
+                rect.height + padding * 2,
+                {
+                    isStatic: true,
+                    restitution: 0.7,
+                    friction: 0.2,
+                    render: { visible: false }
+                }
+            );
+            Matter.World.add(this.engine.world, boundaryBody);
         }
-      );
-      Matter.World.add(this.engine.world, headerBody);
-    }
+    };
 
-    if (arrow) {
-      const arrowRect = arrow.getBoundingClientRect();
-      const arrowBody = Matter.Bodies.rectangle(
-        arrowRect.x + arrowRect.width/2,
-        arrowRect.y + arrowRect.height/2,
-        arrowRect.width,
-        arrowRect.height,
-        {
-          isStatic: true,
-          restitution: 0.7,
-          friction: 0.2,
-          render: { visible: false }
-        }
-      );
-      Matter.World.add(this.engine.world, arrowBody);
-    }
+    // Create boundaries for each text element
+    createBoundary(headerTitle);
+    
+    // For "I build..." text which might be split into multiple elements
+    document.querySelectorAll('.header-text').forEach(element => {
+        createBoundary(element);
+    });
+    
+    createBoundary(arrow);
   }
 }
 
