@@ -845,6 +845,17 @@ body {
   color: rgb(137 182 165 / var(--tw-text-opacity, 1));
 }
 
+form.about-photo-container:hover {
+  --tw-translate-y: 0px;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+form.about-photo-container:hover .glass-blur {
+  opacity: 0.5;
+}
+
 .about-photo-container {
   position: relative;
   overflow: hidden;
@@ -1133,6 +1144,34 @@ body {
     transform: scale(1);
     opacity: 0.5;
   }
+}
+
+/* Contact Form Styles */
+
+input, textarea {
+  font-family: Fira Code, monospace;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+input:focus, textarea:focus {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow: 0 0 15px rgba(var(--theme-primary-rgb), 0.1);
+}
+
+/* Form glass container specific styles */
+
+form.glass-container:hover {
+  --tw-translate-y: 0px;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+form.glass-container:hover .glass-blur {
+  opacity: 0.5;
 }
 
 .sr-only {
@@ -2052,6 +2091,12 @@ body {
 
 .hover\:-translate-y-1:hover {
   --tw-translate-y: -0.25rem;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:scale-100:hover {
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 

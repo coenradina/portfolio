@@ -243,6 +243,20 @@ function initColorSwitcher() {
                 footer a {
                     color: rgba(255, 255, 255, 0.9) !important;
                 }
+                
+                /* Contact Form Styles */
+                input:focus, textarea:focus {
+                    border-color: ${newColor} !important;
+                    box-shadow: 0 0 15px rgba(var(--theme-primary-rgb), 0.1) !important;
+                }
+                
+                form button {
+                    background-color: ${newColor} !important;
+                }
+                
+                form button:hover {
+                    background-color: ${createDarkerColor(newColorRGB, 0.2)} !important;
+                }
             `;
             
             // Remove any previous color switcher styles

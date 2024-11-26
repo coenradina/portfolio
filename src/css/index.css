@@ -240,6 +240,25 @@
     50% { transform: scale(1.2); opacity: 0.2; }
     100% { transform: scale(1); opacity: 0.5; }
   }
+
+  /* Contact Form Styles */
+  input, textarea {
+    @apply font-code text-sm;
+  }
+
+  input:focus, textarea:focus {
+    @apply shadow-lg;
+    box-shadow: 0 0 15px rgba(var(--theme-primary-rgb), 0.1);
+  }
+
+  /* Form glass container specific styles */
+  form.glass-container {
+    @apply hover:scale-100 hover:translate-y-0;
+  }
+
+  form.glass-container:hover .glass-blur {
+    @apply opacity-50;
+  }
 }
 
 /* Animations - Consider moving to animation.css */
