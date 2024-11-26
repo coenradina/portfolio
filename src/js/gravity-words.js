@@ -21,28 +21,25 @@ class GravityWords {
       velocityIterations: 8
     });
     
-    // Adjust gravity for gentler movement
+    // Minimal gravity
     this.engine.world.gravity.y = 0;
-    this.engine.world.gravity.scale = 0.0005;
+    this.engine.world.gravity.scale = 0.0001;
     
     // Skills with different sizes based on importance
     this.skills = [
       { text: 'leadership', size: 1.4 },
       { text: 'communication', size: 1.3 },
       { text: 'management', size: 1.1 },
-      { text: 'organization', size: 1.0 },
       { text: 'planning', size: 0.9 },
       { text: 'sql', size: 0.8 },
       { text: 'java', size: 1.2 },
       { text: 'kotlin', size: 1.1 },
-      { text: 'web development', size: 1.3 },
+      { text: 'wordpress', size: 1.3 },
       { text: 'curriculum design', size: 1.4 },
-      { text: 'curriculum creation', size: 1.2 },
-      { text: 'data visualization', size: 1.1 },
-      { text: 'data analysis', size: 1.0 },
+      { text: 'data', size: 1.0 },
       { text: 'collaboration', size: 1.3 },
       { text: 'problem solving', size: 1.2 },
-      { text: 'android development', size: 1.1 }
+      { text: 'android', size: 1.1 }
     ];
 
     this.words = [];
@@ -59,6 +56,11 @@ class GravityWords {
     };
     
     this.currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    
+    this.isInHeader = true;
+    this.movementInterval = null;
+    this.setupScrollWatcher();
+    this.startContinuousMovement();
     
     // Initialize immediately
     this.init();
@@ -261,14 +263,45 @@ class GravityWords {
     // Enhanced collision handling
     Matter.Events.on(this.engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
-        const velocity = pair.collision.velocity;
-        const force = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-        
-        if (force > 3) {
-          // Add slight random rotation on collision
-          const rotationForce = (Math.random() - 0.5) * 0.1;
-          Matter.Body.rotate(pair.bodyA, rotationForce);
-          Matter.Body.rotate(pair.bodyB, rotationForce);
+        if (this.words.includes(pair.bodyA) && this.words.includes(pair.bodyB)) {
+          // Get current velocities
+          const vA = pair.bodyA.velocity;
+          const vB = pair.bodyB.velocity;
+          
+          // Calculate new velocities (reduced for gentler movement)
+          const dampening = 0.8;
+          const minSpeed = 0.2;
+          const maxSpeed = 1.5;
+          
+          // Apply velocities in opposite directions
+          ['bodyA', 'bodyB'].forEach(bodyKey => {
+            const body = pair[bodyKey];
+            const velocity = bodyKey === 'bodyA' ? vB : vA;
+            
+            // Calculate new velocity
+            let newVx = -velocity.x * dampening;
+            let newVy = -velocity.y * dampening;
+            
+            // Ensure minimum movement
+            if (Math.abs(newVx) < minSpeed && Math.abs(newVy) < minSpeed) {
+              const angle = Math.random() * Math.PI * 2;
+              newVx = Math.cos(angle) * minSpeed;
+              newVy = Math.sin(angle) * minSpeed;
+            }
+            
+            // Limit maximum speed
+            const speed = Math.sqrt(newVx * newVx + newVy * newVy);
+            if (speed > maxSpeed) {
+              const scale = maxSpeed / speed;
+              newVx *= scale;
+              newVy *= scale;
+            }
+            
+            Matter.Body.setVelocity(body, {
+              x: newVx,
+              y: newVy
+            });
+          });
         }
       });
     });
@@ -285,6 +318,27 @@ class GravityWords {
       
       // Recreate boundaries
       this.createHeaderBoundaries();
+    });
+
+    // Add scroll handler for performance
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      
+      // Throttle scroll handling
+      scrollTimeout = setTimeout(() => {
+        const header = document.querySelector('header');
+        const headerRect = header.getBoundingClientRect();
+        this.isInHeader = headerRect.bottom > 0;
+        
+        if (this.isInHeader) {
+          this.startContinuousMovement();
+        } else {
+          this.stopContinuousMovement();
+        }
+      }, 100);
     });
   }
 
@@ -316,6 +370,82 @@ class GravityWords {
     document.querySelectorAll('.header-text, h1, .scroll-arrow').forEach(element => {
       createBoundary(element);
     });
+  }
+
+  setupScrollWatcher() {
+    const header = document.querySelector('header'); // Adjust selector as needed
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          this.isInHeader = entry.isIntersecting;
+          if (this.isInHeader) {
+            this.startContinuousMovement();
+          } else {
+            this.stopContinuousMovement();
+          }
+        });
+      },
+      { threshold: 0.1 } // Trigger when 10% of header is visible
+    );
+
+    if (header) {
+      observer.observe(header);
+    }
+  }
+
+  startContinuousMovement() {
+    if (this.movementInterval) return;
+    
+    this.movementInterval = setInterval(() => {
+      if (!this.isInHeader) return;
+
+      this.words.forEach(word => {
+        if (!this.draggedBody || word !== this.draggedBody) {
+          // Add very small random force
+          const forceMagnitude = 0.00003;
+          const angle = Math.random() * Math.PI * 2;
+          
+          // Only apply force if word is moving too slowly
+          const speed = Math.sqrt(
+            word.velocity.x * word.velocity.x + 
+            word.velocity.y * word.velocity.y
+          );
+          
+          if (speed < 0.2) {
+            Matter.Body.applyForce(word, word.position, {
+              x: Math.cos(angle) * forceMagnitude,
+              y: Math.sin(angle) * forceMagnitude
+            });
+          }
+
+          // Maintain minimum velocity
+          if (speed < 0.1) {
+            const minSpeed = 0.2;
+            const angle = Math.random() * Math.PI * 2;
+            Matter.Body.setVelocity(word, {
+              x: Math.cos(angle) * minSpeed,
+              y: Math.sin(angle) * minSpeed
+            });
+          }
+        }
+      });
+    }, 1000);
+  }
+
+  stopContinuousMovement() {
+    if (this.movementInterval) {
+      clearInterval(this.movementInterval);
+      this.movementInterval = null;
+
+      // Gradually slow down all words
+      this.words.forEach(word => {
+        Matter.Body.setVelocity(word, {
+          x: word.velocity.x * 0.95,
+          y: word.velocity.y * 0.95
+        });
+      });
+    }
   }
 }
 
