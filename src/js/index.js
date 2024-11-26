@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavAnimation();
     initGlassmorphism();
     initColorSwitcher();
+
+    // Trigger the default color
+    const defaultColor = document.querySelector('.color-option.active');
+    if (defaultColor) {
+        defaultColor.click();
+    }
 });
 
 function initNavAnimation() {
@@ -95,14 +101,6 @@ function initColorSwitcher() {
     const colorOptions = document.querySelectorAll('.color-option');
     const projectSection = document.getElementById('projects');
     
-    // Store original colors to revert if needed
-    const originalColors = {
-        primary: getComputedStyle(document.documentElement)
-            .getPropertyValue('--color-primary').trim(),
-        secondary: getComputedStyle(document.documentElement)
-            .getPropertyValue('--color-secondary').trim()
-    };
-
     colorOptions.forEach(option => {
         option.addEventListener('click', function() {
             // Remove active class from all options
@@ -112,43 +110,82 @@ function initColorSwitcher() {
             this.classList.add('active');
             
             const newColor = this.dataset.color;
+            const newColorRGB = hexToRGB(newColor);
             
-            // Apply the color change with smooth transition
+            // Create dynamic styles for the color theme
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = `
+                #projects {
+                    --theme-primary: ${newColor};
+                    --theme-primary-rgb: ${newColorRGB.r}, ${newColorRGB.g}, ${newColorRGB.b};
+                }
+                
+                #projects .card-base {
+                    border-color: ${newColor};
+                    background-color: rgba(var(--theme-primary-rgb), 0.03);
+                    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                
+                #projects .card-base:hover {
+                    border-color: ${newColor};
+                    background-color: rgba(var(--theme-primary-rgb), 0.08);
+                    box-shadow: 0 8px 32px rgba(var(--theme-primary-rgb), 0.15);
+                }
+                
+                #projects h3 {
+                    color: ${newColor};
+                }
+                
+                #projects .explore-link {
+                    background-color: ${newColor};
+                    border-color: ${newColor};
+                }
+                
+                #projects .explore-link:hover {
+                    background-color: transparent;
+                    border-color: ${newColor};
+                    color: ${newColor};
+                }
+                
+                #projects .explore-link:hover svg {
+                    color: ${newColor};
+                }
+                
+                #projects .px-2.py-1.bg-background-dark {
+                    background-color: rgba(var(--theme-primary-rgb), 0.1);
+                    color: ${newColor};
+                }
+            `;
+            
+            // Remove any previous color switcher styles
+            const existingStyles = document.querySelectorAll('style[data-color-switcher]');
+            existingStyles.forEach(style => style.remove());
+            
+            // Add the new styles
+            styleSheet.setAttribute('data-color-switcher', '');
+            document.head.appendChild(styleSheet);
+            
+            // Add liquid transition effect
             const cards = projectSection.querySelectorAll('.card-base');
             cards.forEach(card => {
-                // Create a liquid transition effect
-                card.style.transition = 'border-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease';
-                
-                // Update border color
-                card.style.borderColor = newColor;
-                
-                // Update hover state in CSS
-                const style = document.createElement('style');
-                style.textContent = `
-                    .card-base:hover {
-                        border-color: ${newColor}!important;
-                        box-shadow: 0 0 20px ${newColor}20;
-                    }
-                `;
-                document.head.appendChild(style);
-            });
-
-            // Update explore link colors
-            const exploreLinks = projectSection.querySelectorAll('.explore-link');
-            exploreLinks.forEach(link => {
-                link.style.transition = 'border-color 0.5s ease, background-color 0.5s ease';
-                link.style.borderColor = newColor;
-                
-                // Add hover effect
-                const style = document.createElement('style');
-                style.textContent = `
-                    .explore-link:hover {
-                        border-color: ${newColor}!important;
-                        background-color: ${newColor}10;
-                    }
-                `;
-                document.head.appendChild(style);
+                card.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 200);
             });
         });
     });
+}
+
+// Helper function to convert hex to RGB
+function hexToRGB(hex) {
+    // Remove the # if present
+    hex = hex.replace('#', '');
+    
+    // Convert to RGB values
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    
+    return { r, g, b };
 }
