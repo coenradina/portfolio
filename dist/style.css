@@ -861,6 +861,24 @@ body {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.projects {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .projects {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .floating-elements {
   pointer-events: none;
   position: absolute;
@@ -1055,12 +1073,12 @@ body {
   left: 0.25rem;
 }
 
-.left-1\/2 {
-  left: 50%;
-}
-
 .top-6 {
   top: 1.5rem;
+}
+
+.left-1\/2 {
+  left: 50%;
 }
 
 .-z-10 {
@@ -1097,11 +1115,6 @@ body {
   margin-right: 1rem;
 }
 
-.mx-\[10vw\] {
-  margin-left: 10vw;
-  margin-right: 10vw;
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1120,6 +1133,11 @@ body {
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.mx-\[10vw\] {
+  margin-left: 10vw;
+  margin-right: 10vw;
 }
 
 .mb-12 {
@@ -1911,11 +1929,6 @@ body {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.hover\:border-black:hover {
-  --tw-border-opacity: 1;
-  border-color: rgb(0 0 0 / var(--tw-border-opacity, 1));
-}
-
 .hover\:border-primary\/40:hover {
   border-color: rgb(137 182 165 / 0.4);
 }
@@ -1927,6 +1940,11 @@ body {
 
 .hover\:border-secondary\/40:hover {
   border-color: rgb(244 208 63 / 0.4);
+}
+
+.hover\:border-black:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity, 1));
 }
 
 .hover\:text-secondary:hover {
@@ -1974,6 +1992,12 @@ body {
   }
 }
 
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 1024px) {
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
@@ -1985,6 +2009,10 @@ body {
 
   .lg\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-5 {
