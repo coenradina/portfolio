@@ -16,8 +16,14 @@ class GravityWords {
     
     this.engine = Matter.Engine.create({ 
       enableSleeping: false,
-      gravity: { x: 0, y: 0 }
+      constraintIterations: 4,
+      positionIterations: 6,
+      velocityIterations: 4
     });
+    
+    // Adjust gravity for gentler movement
+    this.engine.world.gravity.y = 0;
+    this.engine.world.gravity.scale = 0.001;
     
     // Skills with different sizes based on importance
     this.skills = [
@@ -56,6 +62,32 @@ class GravityWords {
   }
 
   createWords() {
+    // Create boundary walls slightly inside the canvas
+    const margin = 20;
+    const walls = [
+      Matter.Bodies.rectangle(this.canvas.width/2, -margin, this.canvas.width + margin*2, margin*2, { 
+        isStatic: true,
+        restitution: 0.7,
+        friction: 0.2
+      }),
+      Matter.Bodies.rectangle(this.canvas.width/2, this.canvas.height + margin, this.canvas.width + margin*2, margin*2, { 
+        isStatic: true,
+        restitution: 0.7,
+        friction: 0.2
+      }),
+      Matter.Bodies.rectangle(-margin, this.canvas.height/2, margin*2, this.canvas.height + margin*2, { 
+        isStatic: true,
+        restitution: 0.7,
+        friction: 0.2
+      }),
+      Matter.Bodies.rectangle(this.canvas.width + margin, this.canvas.height/2, margin*2, this.canvas.height + margin*2, { 
+        isStatic: true,
+        restitution: 0.7,
+        friction: 0.2
+      })
+    ];
+    Matter.World.add(this.engine.world, walls);
+
     this.skills.forEach((skill, i) => {
       const x = Math.random() * (this.canvas.width - 200) + 100;
       const y = Math.random() * (this.canvas.height - 200) + 100;
@@ -64,25 +96,41 @@ class GravityWords {
         render: { fillStyle: 'rgba(137, 182, 165, 0.8)' },
         chamfer: { radius: 10 },
         density: 0.001,
-        frictionAir: 0.05,
+        frictionAir: 0.02,
+        friction: 0.1,
         restitution: 0.8,
         label: skill.text,
-        isStatic: false  // Make words dynamic again
+        angle: 0
+      });
+
+      // Add initial random velocity
+      const speed = 2;
+      const angle = Math.random() * Math.PI * 2;
+      Matter.Body.setVelocity(word, {
+        x: Math.cos(angle) * speed,
+        y: Math.sin(angle) * speed
       });
 
       Matter.World.add(this.engine.world, word);
       this.words.push(word);
-      console.log(`Created word: ${skill.text} at ${x},${y}`);
     });
 
-    // Add boundaries to keep words contained
-    const walls = [
-      Matter.Bodies.rectangle(this.canvas.width/2, -10, this.canvas.width, 20, { isStatic: true }), // top
-      Matter.Bodies.rectangle(this.canvas.width/2, this.canvas.height+10, this.canvas.width, 20, { isStatic: true }), // bottom
-      Matter.Bodies.rectangle(-10, this.canvas.height/2, 20, this.canvas.height, { isStatic: true }), // left
-      Matter.Bodies.rectangle(this.canvas.width+10, this.canvas.height/2, 20, this.canvas.height, { isStatic: true }) // right
-    ];
-    Matter.World.add(this.engine.world, walls);
+    // Add gentle rotation over time
+    setInterval(() => {
+      this.words.forEach(word => {
+        if (!this.draggedBody || word !== this.draggedBody) {
+          const rotationSpeed = (Math.random() - 0.5) * 0.02;
+          Matter.Body.rotate(word, rotationSpeed);
+          
+          // Keep rotation within ±30 degrees
+          const currentAngle = word.angle % (Math.PI * 2);
+          const maxAngle = Math.PI / 6; // 30 degrees
+          if (Math.abs(currentAngle) > maxAngle) {
+            Matter.Body.setAngle(word, Math.sign(currentAngle) * maxAngle);
+          }
+        }
+      });
+    }, 1000);
   }
 
   animate() {
@@ -142,13 +190,26 @@ class GravityWords {
         const currentPosition = { x: e.offsetX, y: e.offsetY };
         const currentTime = Date.now();
         
-        // Calculate velocity
+        // Calculate velocity with a maximum speed limit
         if (this.lastDragPosition && this.lastDragTime) {
-          const dt = (currentTime - this.lastDragTime) / 1000; // Convert to seconds
+          const dt = Math.max((currentTime - this.lastDragTime) / 1000, 0.016); // Minimum 16ms (60fps)
           this.dragVelocity = {
             x: (currentPosition.x - this.lastDragPosition.x) / dt,
             y: (currentPosition.y - this.lastDragPosition.y) / dt
           };
+          
+          // Limit maximum velocity
+          const maxVelocity = 15;
+          const velocityMagnitude = Math.sqrt(
+            this.dragVelocity.x * this.dragVelocity.x + 
+            this.dragVelocity.y * this.dragVelocity.y
+          );
+          
+          if (velocityMagnitude > maxVelocity) {
+            const scale = maxVelocity / velocityMagnitude;
+            this.dragVelocity.x *= scale;
+            this.dragVelocity.y *= scale;
+          }
         }
         
         Matter.Body.setPosition(this.draggedBody, currentPosition);
@@ -172,10 +233,11 @@ class GravityWords {
 
     window.addEventListener('mouseup', () => {
       if (this.draggedBody && this.dragVelocity) {
-        // Apply throwing velocity
+        // Apply throwing velocity with dampening
+        const throwDampening = 0.1; // Reduce this value to make throws gentler
         Matter.Body.setVelocity(this.draggedBody, {
-          x: this.dragVelocity.x * 0.2, // Reduce velocity for more control
-          y: this.dragVelocity.y * 0.2
+          x: this.dragVelocity.x * throwDampening,
+          y: this.dragVelocity.y * throwDampening
         });
       }
       this.draggedBody = null;
@@ -185,14 +247,17 @@ class GravityWords {
       canvas.style.cursor = 'default';
     });
 
-    // Add collision detection
+    // Enhanced collision handling
     Matter.Events.on(this.engine, 'collisionStart', (event) => {
       event.pairs.forEach((pair) => {
         const velocity = pair.collision.velocity;
         const force = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+        
         if (force > 3) {
-          // Add collision effects here if desired
-          console.log('Collision!', force);
+          // Add slight random rotation on collision
+          const rotationForce = (Math.random() - 0.5) * 0.1;
+          Matter.Body.rotate(pair.bodyA, rotationForce);
+          Matter.Body.rotate(pair.bodyB, rotationForce);
         }
       });
     });
