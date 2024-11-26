@@ -638,12 +638,6 @@ header h4 {
   }
 }
 
-#about {
-  background-color: #eee;
-  height: auto;
-  padding: 10vh 10vw 10vh 10vw;
-}
-
 .about-title {
   display: inline-flex;
   justify-content:center;

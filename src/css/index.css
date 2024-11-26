@@ -110,11 +110,7 @@
            hover:shadow-2xl hover:border-secondary/40 
            transition-all duration-500 ease-out;
   }
-  
-  .about-photo {
-    @apply w-full h-full object-cover object-center
-           hover:scale-105 transition-transform duration-700 ease-out;
-  }
+
   
   .floating-elements {
     @apply absolute inset-0 pointer-events-none;
