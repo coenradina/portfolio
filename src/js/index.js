@@ -195,6 +195,10 @@ function initColorSwitcher() {
                 }
                 
                 .bg-background-dark {
+                    background-color: ${createDarkerColor(newColorRGB, 0.55)} !important;
+                }
+
+                .bg-background-normal {
                     background-color: rgba(var(--theme-primary-rgb), 0.1);
                 }
                 
@@ -217,6 +221,27 @@ function initColorSwitcher() {
                         rgba(var(--theme-primary-rgb), 0.2),
                         transparent 70%
                     );
+                }
+                
+                /* Update specific text elements */
+                .typing-text, .typing-text::after {
+                    color: ${createDarkerColor(newColorRGB, 0.6)} !important;
+                }
+                
+                /* Project section text */
+                .card-base h3 {
+                    color: ${createDarkerColor(newColorRGB, 0.7)} !important;
+                }
+                
+                .card-base p {
+                    color: ${createDarkerColor(newColorRGB, 0.8)} !important;
+                }
+                
+                /* Keep footer text light for contrast */
+                footer p, 
+                footer .text-text,
+                footer a {
+                    color: rgba(255, 255, 255, 0.9) !important;
                 }
             `;
             
@@ -249,9 +274,9 @@ function hexToRGB(hex) {
     return { r, g, b };
 }
 
-// Helper function to create darker color
+// Update the helper function to create better darker colors
 function createDarkerColor(rgb, darknessFactor) {
-    // Mix the color with black based on the darkness factor
+    // Mix the color with black, but preserve some color saturation
     const r = Math.round(rgb.r * (1 - darknessFactor));
     const g = Math.round(rgb.g * (1 - darknessFactor));
     const b = Math.round(rgb.b * (1 - darknessFactor));
