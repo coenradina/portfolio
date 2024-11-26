@@ -154,6 +154,19 @@ function initColorSwitcher() {
             const newColor = this.dataset.color;
             const newColorRGB = hexToRGB(newColor);
             
+            // Set gravity words color based on selected color
+            let gravityColor = newColor;
+            if (newColor === '#89B6A5') {  // If green is selected
+                gravityColor = '#F4D03F';  // Use yellow
+            } else if (newColor === '#F4D03F') {  // If yellow is selected
+                gravityColor = '#E74C3C';  // Use red
+            } else if (newColor === '#E74C3C') {  // If red is selected
+                gravityColor = '#89B6A5';  // Use green
+            }
+            
+            // Update CSS variable for gravity words
+            document.documentElement.style.setProperty('--theme-primary', gravityColor);
+            
             // Create darker text color by mixing with black
             const darkerColor = createDarkerColor(newColorRGB, 0.7);
             const slightlyDarkerColor = createDarkerColor(newColorRGB, 0.4);
