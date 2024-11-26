@@ -49,13 +49,9 @@ class GravityWords {
     this.lastDragPosition = null;
     this.lastDragTime = null;
     
-    // Color palettes
-    this.colors = {
-      light: ['#89B6A5', '#FFD700', '#FF6B6B'], // sage, gold, coral
-      dark: ['#89B6A5', '#FFD700', '#FF6B6B']   // same colors for now
-    };
-    
-    this.currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    // Get initial color from CSS variable
+    this.currentColor = this.getThemeColor();
+    this.setupColorObserver();
     
     this.isInHeader = true;
     this.movementInterval = null;
@@ -79,9 +75,33 @@ class GravityWords {
     console.log('Initialization complete');
   }
 
-  getRandomColor() {
-    const colors = this.colors[this.currentTheme];
-    return colors[Math.floor(Math.random() * colors.length)];
+  getThemeColor() {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const themeColor = rootStyle.getPropertyValue('--theme-primary').trim();
+    return themeColor + 'B3'; // B3 in hex is 70% opacity
+  }
+
+  setupColorObserver() {
+    // Watch for style changes (color switcher updates)
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' && mutation.target === document.head) {
+          const newColor = this.getThemeColor();
+          if (newColor !== this.currentColor) {
+            this.currentColor = newColor;
+            // Update all existing words
+            this.words.forEach(word => {
+              word.color = this.currentColor;
+            });
+          }
+        }
+      });
+    });
+
+    observer.observe(document.head, {
+      childList: true,
+      subtree: true
+    });
   }
 
   createWords() {
@@ -119,7 +139,7 @@ class GravityWords {
         slop: 0.05,
         label: skill.text,
         angle: 0,
-        color: this.getRandomColor()
+        color: this.currentColor // Use theme color
       });
 
       // Reduced initial velocity for gentler movement
