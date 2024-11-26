@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initNavAnimation();
     initGlassmorphism();
+    initColorSwitcher();
 });
 
 function initNavAnimation() {
@@ -86,6 +87,68 @@ function initGlassmorphism() {
         
         container.addEventListener('touchend', () => {
             container.classList.remove('hover');
+        });
+    });
+}
+
+function initColorSwitcher() {
+    const colorOptions = document.querySelectorAll('.color-option');
+    const projectSection = document.getElementById('projects');
+    
+    // Store original colors to revert if needed
+    const originalColors = {
+        primary: getComputedStyle(document.documentElement)
+            .getPropertyValue('--color-primary').trim(),
+        secondary: getComputedStyle(document.documentElement)
+            .getPropertyValue('--color-secondary').trim()
+    };
+
+    colorOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove active class from all options
+            colorOptions.forEach(opt => opt.classList.remove('active'));
+            
+            // Add active class to clicked option
+            this.classList.add('active');
+            
+            const newColor = this.dataset.color;
+            
+            // Apply the color change with smooth transition
+            const cards = projectSection.querySelectorAll('.card-base');
+            cards.forEach(card => {
+                // Create a liquid transition effect
+                card.style.transition = 'border-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease';
+                
+                // Update border color
+                card.style.borderColor = newColor;
+                
+                // Update hover state in CSS
+                const style = document.createElement('style');
+                style.textContent = `
+                    .card-base:hover {
+                        border-color: ${newColor}!important;
+                        box-shadow: 0 0 20px ${newColor}20;
+                    }
+                `;
+                document.head.appendChild(style);
+            });
+
+            // Update explore link colors
+            const exploreLinks = projectSection.querySelectorAll('.explore-link');
+            exploreLinks.forEach(link => {
+                link.style.transition = 'border-color 0.5s ease, background-color 0.5s ease';
+                link.style.borderColor = newColor;
+                
+                // Add hover effect
+                const style = document.createElement('style');
+                style.textContent = `
+                    .explore-link:hover {
+                        border-color: ${newColor}!important;
+                        background-color: ${newColor}10;
+                    }
+                `;
+                document.head.appendChild(style);
+            });
         });
     });
 }

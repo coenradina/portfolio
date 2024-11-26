@@ -186,6 +186,49 @@
   .glass-container:hover svg {
     @apply text-primary transform scale-110;
   }
+
+  /* Color Switcher */
+  .color-switcher {
+    @apply relative z-10;
+  }
+
+  .color-option {
+    @apply w-8 h-8 rounded-full border-2 border-background-dark
+           cursor-pointer transition-all duration-300
+           hover:scale-110 hover:shadow-lg;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .color-option::after {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .color-option:hover::after {
+    opacity: 1;
+  }
+
+  .color-option.active {
+    @apply scale-110 shadow-lg;
+    border-width: 3px;
+  }
+
+  .color-option.active::before {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    box-shadow: 0 0 15px currentColor;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 0.2; }
+    100% { transform: scale(1); opacity: 0.5; }
+  }
 }
 
 /* Animations - Consider moving to animation.css */
