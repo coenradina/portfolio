@@ -27,14 +27,22 @@ class GravityWords {
     
     // Skills with different sizes based on importance
     this.skills = [
-      { text: 'Leadership', size: 1.2 },
-      { text: 'Communication', size: 1.2 },
-      { text: 'Management', size: 1.1 },
-      { text: 'Organization', size: 1.1 },
-      { text: 'Planning', size: 1.0 },
-      { text: 'SQL', size: 1.0 },
-      { text: 'Web Development', size: 1.1 },
-      { text: 'Curriculum Design', size: 1.2 }
+      { text: 'leadership', size: 1.4 },
+      { text: 'communication', size: 1.3 },
+      { text: 'management', size: 1.1 },
+      { text: 'organization', size: 1.0 },
+      { text: 'planning', size: 0.9 },
+      { text: 'sql', size: 0.8 },
+      { text: 'java', size: 1.2 },
+      { text: 'kotlin', size: 1.1 },
+      { text: 'web development', size: 1.3 },
+      { text: 'curriculum design', size: 1.4 },
+      { text: 'curriculum creation', size: 1.2 },
+      { text: 'data visualization', size: 1.1 },
+      { text: 'data analysis', size: 1.0 },
+      { text: 'collaboration', size: 1.3 },
+      { text: 'problem solving', size: 1.2 },
+      { text: 'android development', size: 1.1 }
     ];
 
     this.words = [];
@@ -62,6 +70,9 @@ class GravityWords {
   }
 
   createWords() {
+    // Create header boundaries first
+    this.createHeaderBoundaries();
+
     // Create boundary walls slightly inside the canvas
     const margin = 20;
     const walls = [
@@ -261,6 +272,60 @@ class GravityWords {
         }
       });
     });
+
+    // Add resize handler
+    window.addEventListener('resize', () => {
+      // Remove old boundaries
+      const bodies = Matter.Composite.allBodies(this.engine.world);
+      bodies.forEach(body => {
+        if (body.isStatic && !this.words.includes(body)) {
+          Matter.World.remove(this.engine.world, body);
+        }
+      });
+      
+      // Recreate boundaries
+      this.createHeaderBoundaries();
+    });
+  }
+
+  createHeaderBoundaries() {
+    // Get header elements
+    const headerText = document.querySelector('h1');
+    const arrow = document.querySelector('.scroll-arrow'); // Update this selector as needed
+    
+    if (headerText) {
+      const headerRect = headerText.getBoundingClientRect();
+      const headerBody = Matter.Bodies.rectangle(
+        headerRect.x + headerRect.width/2,
+        headerRect.y + headerRect.height/2,
+        headerRect.width,
+        headerRect.height,
+        {
+          isStatic: true,
+          restitution: 0.7,
+          friction: 0.2,
+          render: { visible: false }
+        }
+      );
+      Matter.World.add(this.engine.world, headerBody);
+    }
+
+    if (arrow) {
+      const arrowRect = arrow.getBoundingClientRect();
+      const arrowBody = Matter.Bodies.rectangle(
+        arrowRect.x + arrowRect.width/2,
+        arrowRect.y + arrowRect.height/2,
+        arrowRect.width,
+        arrowRect.height,
+        {
+          isStatic: true,
+          restitution: 0.7,
+          friction: 0.2,
+          render: { visible: false }
+        }
+      );
+      Matter.World.add(this.engine.world, arrowBody);
+    }
   }
 }
 
