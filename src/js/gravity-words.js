@@ -52,6 +52,14 @@ class GravityWords {
     this.lastDragPosition = null;
     this.lastDragTime = null;
     
+    // Color palettes
+    this.colors = {
+      light: ['#89B6A5', '#FFD700', '#FF6B6B'], // sage, gold, coral
+      dark: ['#89B6A5', '#FFD700', '#FF6B6B']   // same colors for now
+    };
+    
+    this.currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    
     // Initialize immediately
     this.init();
   }
@@ -67,6 +75,11 @@ class GravityWords {
     // Start animation loop
     this.animate();
     console.log('Initialization complete');
+  }
+
+  getRandomColor() {
+    const colors = this.colors[this.currentTheme];
+    return colors[Math.floor(Math.random() * colors.length)];
   }
 
   createWords() {
@@ -104,14 +117,14 @@ class GravityWords {
       const y = Math.random() * (this.canvas.height - 200) + 100;
       
       const word = Matter.Bodies.rectangle(x, y, 150, 40, {
-        render: { fillStyle: 'rgba(137, 182, 165, 0.8)' },
         chamfer: { radius: 10 },
         density: 0.001,
         frictionAir: 0.02,
         friction: 0.1,
         restitution: 0.8,
         label: skill.text,
-        angle: 0
+        angle: 0,
+        color: this.getRandomColor() // Assign random color
       });
 
       // Add initial random velocity
@@ -148,24 +161,18 @@ class GravityWords {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
     this.words.forEach(word => {
-      this.ctx.save();
-      this.ctx.translate(word.position.x, word.position.y);
-      this.ctx.rotate(word.angle);
-      
-      // Draw background with hover effect
-      this.ctx.fillStyle = word === this.draggedBody ? 
-        'rgba(255, 255, 255, 0.2)' : 
-        'rgba(255, 255, 255, 0.1)';
-      this.ctx.fillRect(-75, -20, 150, 40);
-      
-      // Draw text
-      this.ctx.fillStyle = '#89B6A5';
-      this.ctx.font = '16px "Fira Code"';
-      this.ctx.textAlign = 'center';
-      this.ctx.textBaseline = 'middle';
-      this.ctx.fillText(word.label, 0, 0);
-      
-      this.ctx.restore();
+        this.ctx.save();
+        this.ctx.translate(word.position.x, word.position.y);
+        this.ctx.rotate(word.angle);
+        
+        // Draw text with random color, no background
+        this.ctx.fillStyle = word.color;
+        this.ctx.font = '16px "Fira Code"';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(word.label, 0, 0);
+        
+        this.ctx.restore();
     });
     
     requestAnimationFrame(() => this.animate());
