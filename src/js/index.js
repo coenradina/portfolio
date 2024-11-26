@@ -21,6 +21,48 @@ document.addEventListener('DOMContentLoaded', function() {
     if (defaultColor) {
         defaultColor.click();
     }
+
+    // Update the form submission handler
+    const contactForm = document.getElementById('contactForm');
+    const emailConfirmModal = document.getElementById('emailConfirmModal');
+    const confirmEmailBtn = document.getElementById('confirmEmail');
+    const cancelEmailBtn = document.getElementById('cancelEmail');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            emailConfirmModal.classList.remove('hidden');
+        });
+
+        confirmEmailBtn.addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Construct email body
+            const mailtoLink = `mailto:inquiries.astridcoenrad@gmail.com?subject=Portfolio Contact: ${encodeURIComponent(name)}&body=${encodeURIComponent(
+                `Hello, I'm ${name}\nYou can reach me at ${email}\n\nI'm reaching out regarding:\n${message}`
+            )}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+            
+            // Clear form and hide modal
+            contactForm.reset();
+            emailConfirmModal.classList.add('hidden');
+        });
+
+        cancelEmailBtn.addEventListener('click', function() {
+            emailConfirmModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        emailConfirmModal.addEventListener('click', function(e) {
+            if (e.target === emailConfirmModal) {
+                emailConfirmModal.classList.add('hidden');
+            }
+        });
+    }
 });
 
 function initNavAnimation() {

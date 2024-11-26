@@ -241,7 +241,7 @@
             </div>
 
             <div class="max-w-2xl mx-auto">
-                <form class="glass-container bg-background-normal p-8">
+                <form class="glass-container p-8 bg-background-normal" action="mailto:inquiries.astridcoenrad@gmail.com" method="POST" enctype="text/plain" id="contactForm">
                     <div class="grid grid-cols-1 gap-6 w-full">
                         <div>
                             <label for="name" class="block text-text-dark font-code mb-2">name</label>
@@ -329,6 +329,21 @@
     </footer>
 
     <script defer type="text/javascript" src="src/js/index.js"></script>
+
+    <div id="emailConfirmModal" class="fixed inset-0 bg-background-dark/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="glass-container bg-background-dark p-8 max-w-md mx-4 hover:scale-100">
+            <h3 class="text-xl font-sans text-text mb-4">confirm action</h3>
+            <p class="text-text mb-6">you will be redirected to your default email application.</p>
+            <div class="flex gap-4 justify-end">
+                <button id="cancelEmail" class="px-4 py-2 text-text hover:text-primary transition-colors">
+                    cancel
+                </button>
+                <button id="confirmEmail" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-all">
+                    continue →
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
