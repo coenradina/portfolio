@@ -51,21 +51,41 @@ function initGlassmorphism() {
     const glassBlur = document.querySelector('.glass-blur');
 
     document.addEventListener('mousemove', (e) => {
-        if (glassBlur) {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            
-            glassBlur.style.setProperty('--mouse-x', `${x}%`);
-            glassBlur.style.setProperty('--mouse-y', `${y}%`);
-        }
+        requestAnimationFrame(() => {
+            if (glassBlur) {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                
+                glassBlur.style.setProperty('--mouse-x', `${x}%`);
+                glassBlur.style.setProperty('--mouse-y', `${y}%`);
+            }
 
-        glassContainers.forEach(container => {
-            const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            glassContainers.forEach(container => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Smooth the movement with lerp (linear interpolation)
+                const currentX = parseFloat(container.style.getPropertyValue('--mouse-x')) || x;
+                const currentY = parseFloat(container.style.getPropertyValue('--mouse-y')) || y;
+                
+                const newX = currentX + (x - currentX) * 0.1;
+                const newY = currentY + (y - currentY) * 0.1;
+                
+                container.style.setProperty('--mouse-x', `${newX}px`);
+                container.style.setProperty('--mouse-y', `${newY}px`);
+            });
+        });
+    });
 
-            container.style.setProperty('--mouse-x', `${x}px`);
-            container.style.setProperty('--mouse-y', `${y}px`);
+    // Add hover effect for touch devices
+    glassContainers.forEach(container => {
+        container.addEventListener('touchstart', () => {
+            container.classList.add('hover');
+        });
+        
+        container.addEventListener('touchend', () => {
+            container.classList.remove('hover');
         });
     });
 }

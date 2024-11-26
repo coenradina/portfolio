@@ -144,26 +144,47 @@
   }
   
   .glass-container {
-    @apply relative backdrop-blur-md bg-white/30 
-           border border-white/40 shadow-lg rounded-xl
+    @apply relative backdrop-blur-md bg-background-dark/90
+           border border-primary/20 shadow-lg rounded-xl
            overflow-hidden
            hover:shadow-2xl hover:border-primary/40 
-           transition-all duration-500 ease-out;
+           hover:scale-[1.02] hover:-translate-y-1
+           transition-all duration-700 ease-out
+           cursor-pointer;
   }
   
   .glass-content {
-    @apply relative p-8 z-10;
+    @apply relative p-8 z-10 flex flex-col items-center justify-center h-full;
   }
   
   .glass-blur {
-    @apply absolute inset-0 -z-10;
+    @apply absolute inset-0 -z-10 opacity-0 
+           transition-all duration-700 ease-out;
     background: radial-gradient(
       circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-      rgba(137, 182, 165, 0.15),
-      rgba(244, 208, 63, 0.15),
+      rgba(137, 182, 165, 0.2),
+      rgba(244, 208, 63, 0.2),
       transparent 70%
     );
     filter: blur(24px);
+    transform: scale(0.8);
+  }
+  
+  .glass-container:hover .glass-blur {
+    @apply opacity-100;
+    transform: scale(1);
+  }
+  
+  .glass-container:hover .glass-content {
+    transform: translateZ(10px);
+  }
+  
+  .glass-container svg {
+    @apply w-16 h-16 text-secondary mb-4 mx-auto stroke-[1.5];
+  }
+  
+  .glass-container:hover svg {
+    @apply text-primary transform scale-110;
   }
 }
 
