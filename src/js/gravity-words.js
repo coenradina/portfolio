@@ -16,14 +16,14 @@ class GravityWords {
     
     this.engine = Matter.Engine.create({ 
       enableSleeping: false,
-      constraintIterations: 4,
-      positionIterations: 6,
-      velocityIterations: 4
+      constraintIterations: 8,
+      positionIterations: 12,
+      velocityIterations: 8
     });
     
     // Adjust gravity for gentler movement
     this.engine.world.gravity.y = 0;
-    this.engine.world.gravity.scale = 0.001;
+    this.engine.world.gravity.scale = 0.0005;
     
     // Skills with different sizes based on importance
     this.skills = [
@@ -86,29 +86,21 @@ class GravityWords {
     // Create header boundaries first
     this.createHeaderBoundaries();
 
-    // Create boundary walls slightly inside the canvas
+    // Create boundary walls with smoother properties
     const margin = 20;
+    const wallOptions = {
+      isStatic: true,
+      restitution: 0.5,
+      friction: 0.1,
+      slop: 0.05,
+      density: 0.1
+    };
+
     const walls = [
-      Matter.Bodies.rectangle(this.canvas.width/2, -margin, this.canvas.width + margin*2, margin*2, { 
-        isStatic: true,
-        restitution: 0.7,
-        friction: 0.2
-      }),
-      Matter.Bodies.rectangle(this.canvas.width/2, this.canvas.height + margin, this.canvas.width + margin*2, margin*2, { 
-        isStatic: true,
-        restitution: 0.7,
-        friction: 0.2
-      }),
-      Matter.Bodies.rectangle(-margin, this.canvas.height/2, margin*2, this.canvas.height + margin*2, { 
-        isStatic: true,
-        restitution: 0.7,
-        friction: 0.2
-      }),
-      Matter.Bodies.rectangle(this.canvas.width + margin, this.canvas.height/2, margin*2, this.canvas.height + margin*2, { 
-        isStatic: true,
-        restitution: 0.7,
-        friction: 0.2
-      })
+      Matter.Bodies.rectangle(this.canvas.width/2, -margin, this.canvas.width + margin*2, margin*2, wallOptions),
+      Matter.Bodies.rectangle(this.canvas.width/2, this.canvas.height + margin, this.canvas.width + margin*2, margin*2, wallOptions),
+      Matter.Bodies.rectangle(-margin, this.canvas.height/2, margin*2, this.canvas.height + margin*2, wallOptions),
+      Matter.Bodies.rectangle(this.canvas.width + margin, this.canvas.height/2, margin*2, this.canvas.height + margin*2, wallOptions)
     ];
     Matter.World.add(this.engine.world, walls);
 
@@ -118,17 +110,18 @@ class GravityWords {
       
       const word = Matter.Bodies.rectangle(x, y, 150, 40, {
         chamfer: { radius: 10 },
-        density: 0.001,
-        frictionAir: 0.02,
-        friction: 0.1,
-        restitution: 0.8,
+        density: 0.0005,
+        frictionAir: 0.01,
+        friction: 0.05,
+        restitution: 0.6,
+        slop: 0.05,
         label: skill.text,
         angle: 0,
-        color: this.getRandomColor() // Assign random color
+        color: this.getRandomColor()
       });
 
-      // Add initial random velocity
-      const speed = 2;
+      // Reduced initial velocity for gentler movement
+      const speed = 1;
       const angle = Math.random() * Math.PI * 2;
       Matter.Body.setVelocity(word, {
         x: Math.cos(angle) * speed,
@@ -296,41 +289,33 @@ class GravityWords {
   }
 
   createHeaderBoundaries() {
-    // Get all header elements
-    const headerTitle = document.querySelector('h1');
-    const headerSubtext = document.querySelector('.header-subtext'); // Add class to your "I build..." text
-    const arrow = document.querySelector('.scroll-arrow');
-    
+    const boundaryOptions = {
+      isStatic: true,
+      restitution: 0.5,
+      friction: 0.05,
+      slop: 0.05,
+      density: 0.1
+    };
+
     const createBoundary = (element) => {
-        if (element) {
-            const rect = element.getBoundingClientRect();
-            // Add some padding around the text
-            const padding = 10;
-            const boundaryBody = Matter.Bodies.rectangle(
-                rect.x + rect.width/2,
-                rect.y + rect.height/2,
-                rect.width + padding * 2,
-                rect.height + padding * 2,
-                {
-                    isStatic: true,
-                    restitution: 0.7,
-                    friction: 0.2,
-                    render: { visible: false }
-                }
-            );
-            Matter.World.add(this.engine.world, boundaryBody);
-        }
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const padding = 10;
+        const boundaryBody = Matter.Bodies.rectangle(
+          rect.x + rect.width/2,
+          rect.y + rect.height/2,
+          rect.width + padding * 2,
+          rect.height + padding * 2,
+          boundaryOptions
+        );
+        Matter.World.add(this.engine.world, boundaryBody);
+      }
     };
 
     // Create boundaries for each text element
-    createBoundary(headerTitle);
-    
-    // For "I build..." text which might be split into multiple elements
-    document.querySelectorAll('.header-text').forEach(element => {
-        createBoundary(element);
+    document.querySelectorAll('.header-text, h1, .scroll-arrow').forEach(element => {
+      createBoundary(element);
     });
-    
-    createBoundary(arrow);
   }
 }
 
