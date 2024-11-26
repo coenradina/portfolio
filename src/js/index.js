@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     initNavAnimation();
+    initGlassmorphism();
 });
 
 function initNavAnimation() {
@@ -41,6 +42,30 @@ function initNavAnimation() {
         
         link.addEventListener('mouseleave', () => {
             link.style.transform = 'translate(0, 0)';
+        });
+    });
+}
+
+function initGlassmorphism() {
+    const glassContainers = document.querySelectorAll('.glass-container');
+    const glassBlur = document.querySelector('.glass-blur');
+
+    document.addEventListener('mousemove', (e) => {
+        if (glassBlur) {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            
+            glassBlur.style.setProperty('--mouse-x', `${x}%`);
+            glassBlur.style.setProperty('--mouse-y', `${y}%`);
+        }
+
+        glassContainers.forEach(container => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            container.style.setProperty('--mouse-x', `${x}px`);
+            container.style.setProperty('--mouse-y', `${y}px`);
         });
     });
 }

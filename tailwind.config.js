@@ -38,11 +38,18 @@ module.exports = {
       },
       animation: {
         'bounce-slow': 'bounce 1s infinite',
-        'typing': 'typing 3s infinite'
+        'typing': 'typing 3s infinite',
+        float: 'float 15s ease-in-out infinite',
       },
       spacing: {
         'section': '10vh 10vw'
-      }
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-20px) rotate(10deg)' },
+        }
+      },
     },
   },
   plugins: [],

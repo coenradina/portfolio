@@ -98,15 +98,32 @@
   
   /* About Section */
   .about-content {
-    @apply flex justify-center items-center;
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-8 relative;
   }
   
   .about-paragraph {
-    @apply h-auto mx-auto text-justify leading-[170%] text-base pr-[10vw];
+    @apply text-justify leading-[170%] text-base;
+  }
+  
+  .about-photo-container {
+    @apply glass-container relative overflow-hidden
+           hover:shadow-2xl hover:border-secondary/40 
+           transition-all duration-500 ease-out;
   }
   
   .about-photo {
-    @apply w-[30vw] h-auto float-right;
+    @apply w-full h-full object-cover object-center
+           hover:scale-105 transition-transform duration-700 ease-out;
+  }
+  
+  .floating-elements {
+    @apply absolute inset-0 pointer-events-none;
+  }
+  
+  .floating-element {
+    @apply absolute w-16 h-16 rounded-full 
+           bg-gradient-to-br from-primary/20 to-secondary/20 
+           backdrop-blur-md animate-float;
   }
   
   /* Lists */
@@ -124,6 +141,29 @@
   
   .typing-text::after {
     @apply text-secondary;
+  }
+  
+  .glass-container {
+    @apply relative backdrop-blur-md bg-white/30 
+           border border-white/40 shadow-lg rounded-xl
+           overflow-hidden
+           hover:shadow-2xl hover:border-primary/40 
+           transition-all duration-500 ease-out;
+  }
+  
+  .glass-content {
+    @apply relative p-8 z-10;
+  }
+  
+  .glass-blur {
+    @apply absolute inset-0 -z-10;
+    background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(137, 182, 165, 0.15),
+      rgba(244, 208, 63, 0.15),
+      transparent 70%
+    );
+    filter: blur(24px);
   }
 }
 
