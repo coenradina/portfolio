@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initNavAnimation();
     initGlassmorphism();
     initColorSwitcher();
+    initGravityWords();
 
     // Trigger the default color
     const defaultColor = document.querySelector('.color-option.active');
@@ -337,4 +338,13 @@ function createDarkerColor(rgb, darknessFactor) {
     const g = Math.round(rgb.g * (1 - darknessFactor));
     const b = Math.round(rgb.b * (1 - darknessFactor));
     return `rgb(${r}, ${g}, ${b})`;
+}
+
+function initGravityWords() {
+    if (typeof Matter === 'undefined') {
+        console.error('Matter.js is not loaded');
+        return;
+    }
+    
+    const gravityWords = new GravityWords();
 }
