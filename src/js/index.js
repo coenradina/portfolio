@@ -99,7 +99,6 @@ function initGlassmorphism() {
 
 function initColorSwitcher() {
     const colorOptions = document.querySelectorAll('.color-option');
-    const projectSection = document.getElementById('projects');
     
     colorOptions.forEach(option => {
         option.addEventListener('click', function() {
@@ -113,59 +112,111 @@ function initColorSwitcher() {
             const newColorRGB = hexToRGB(newColor);
             
             // Create darker text color by mixing with black
-            const darkerColor = createDarkerColor(newColorRGB, 0.7); // 70% darker
-            const slightlyDarkerColor = createDarkerColor(newColorRGB, 0.4); // 40% darker
+            const darkerColor = createDarkerColor(newColorRGB, 0.7);
+            const slightlyDarkerColor = createDarkerColor(newColorRGB, 0.4);
             
-            // Create dynamic styles for the color theme
+            // Create dynamic styles for the entire site
             const styleSheet = document.createElement('style');
             styleSheet.textContent = `
-                #projects {
+                :root {
                     --theme-primary: ${newColor};
                     --theme-primary-rgb: ${newColorRGB.r}, ${newColorRGB.g}, ${newColorRGB.b};
                 }
                 
-                #projects .card-base {
-                    border-color: ${newColor};
-                    background-color: rgba(var(--theme-primary-rgb), 0.03);
-                    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                .text-primary {
+                    color: ${newColor} !important;
                 }
                 
-                #projects .card-base:hover {
-                    border-color: ${newColor};
+                .text-secondary {
+                    color: ${slightlyDarkerColor} !important;
+                }
+                
+                .border-primary {
+                    border-color: ${newColor} !important;
+                }
+                
+                .section-title {
+                    color: ${slightlyDarkerColor} !important;
+                }
+                
+                .card-base {
+                    border-color: ${newColor} !important;
+                    background-color: rgba(var(--theme-primary-rgb), 0.03);
+                }
+                
+                .card-base:hover {
+                    border-color: ${newColor} !important;
                     background-color: rgba(var(--theme-primary-rgb), 0.08);
                     box-shadow: 0 8px 32px rgba(var(--theme-primary-rgb), 0.15);
                 }
                 
-                #projects .section-title {
-                    color: ${slightlyDarkerColor};
+                .glass-container {
+                    border-color: rgba(var(--theme-primary-rgb), 0.2);
                 }
                 
-                #projects h3 {
-                    color: ${darkerColor};
+                .glass-container:hover {
+                    border-color: rgba(var(--theme-primary-rgb), 0.4);
                 }
                 
-                #projects p {
-                    color: ${darkerColor};
+                .glass-container svg {
+                    color: ${newColor} !important;
                 }
                 
-                #projects .explore-link {
+                .nav-link:hover {
+                    color: ${newColor} !important;
+                }
+                
+                .nav-link.active {
+                    color: ${newColor} !important;
+                }
+                
+                .nav-link::before {
+                    background: linear-gradient(
+                        90deg,
+                        rgba(var(--theme-primary-rgb), 0) 0%,
+                        rgba(var(--theme-primary-rgb), 0.8) 50%,
+                        rgba(var(--theme-primary-rgb), 0) 100%
+                    ) !important;
+                }
+                
+                .explore-link {
                     background-color: ${newColor};
                     border-color: ${newColor};
                 }
                 
-                #projects .explore-link:hover {
+                .explore-link:hover {
                     background-color: transparent;
                     border-color: ${newColor};
                     color: ${darkerColor};
                 }
                 
-                #projects .explore-link:hover svg {
+                .explore-link:hover svg {
                     color: ${darkerColor};
                 }
                 
-                #projects .px-2.py-1.bg-background-dark {
+                .bg-background-dark {
                     background-color: rgba(var(--theme-primary-rgb), 0.1);
+                }
+                
+                footer a:hover {
+                    color: ${newColor} !important;
+                }
+                
+                h3 {
                     color: ${darkerColor};
+                }
+                
+                p {
+                    color: ${darkerColor};
+                }
+                
+                .glass-blur {
+                    background: radial-gradient(
+                        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                        rgba(var(--theme-primary-rgb), 0.2),
+                        rgba(var(--theme-primary-rgb), 0.2),
+                        transparent 70%
+                    );
                 }
             `;
             
@@ -177,8 +228,8 @@ function initColorSwitcher() {
             styleSheet.setAttribute('data-color-switcher', '');
             document.head.appendChild(styleSheet);
             
-            // Add liquid transition effect
-            const cards = projectSection.querySelectorAll('.card-base');
+            // Add liquid transition effect to all cards
+            const cards = document.querySelectorAll('.card-base');
             cards.forEach(card => {
                 card.style.transform = 'scale(1.02)';
                 setTimeout(() => {

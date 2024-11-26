@@ -19,6 +19,14 @@
 </head>
 
 <body class="font-mono bg-white">
+    <div class="color-switcher-wrapper">
+        <div class="color-switcher flex gap-4">
+            <button class="color-option active" data-color="#89B6A5" style="background-color: #89B6A5;"></button>
+            <button class="color-option" data-color="#F4D03F" style="background-color: #F4D03F;"></button>
+            <button class="color-option" data-color="#E74C3C" style="background-color: #E74C3C;"></button>
+        </div>
+    </div>
+
     <header class="h-screen flex flex-col justify-center mx-[10vw]">
         <nav
             class="fixed top-6 left-1/2 -translate-x-1/2 bg-background-dark/80 backdrop-blur-sm z-50 border border-dark-light rounded-full shadow-lg">
@@ -157,11 +165,6 @@
         <div class="container-base">
             <div class="text-center mb-12">
                 <h2 class="section-title">featured projects</h2>
-                <div class="color-switcher flex justify-center gap-4 mt-4">
-                    <button class="color-option active" data-color="#89B6A5" style="background-color: #89B6A5;"></button>
-                    <button class="color-option" data-color="#F4D03F" style="background-color: #F4D03F;"></button>
-                    <button class="color-option" data-color="#E74C3C" style="background-color: #E74C3C;"></button>
-                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

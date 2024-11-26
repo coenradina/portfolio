@@ -188,12 +188,19 @@
   }
 
   /* Color Switcher */
+  .color-switcher-wrapper {
+    @apply fixed top-10 left-10 z-50 
+          backdrop-blur-sm 
+           border rounded-full 
+           shadow-lg p-4;
+  }
+
   .color-switcher {
-    @apply relative z-10;
+    @apply gap-5;
   }
 
   .color-option {
-    @apply w-8 h-8 rounded-full border-2 border-background-dark
+    @apply w-9 h-9 rounded-full border-2 border-background-dark
            cursor-pointer transition-all duration-300
            hover:scale-110 hover:shadow-lg;
     position: relative;
