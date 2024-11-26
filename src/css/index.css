@@ -189,18 +189,22 @@
 
   /* Color Switcher */
   .color-switcher-wrapper {
-    @apply fixed top-10 left-10 z-50 
+    @apply fixed top-6 left-10 z-50 
           backdrop-blur-sm 
            border rounded-full 
-           shadow-lg p-4;
+           shadow-lg;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
   }
 
   .color-switcher {
-    @apply gap-5;
+    @apply gap-3;
   }
 
   .color-option {
-    @apply w-9 h-9 rounded-full border-2 border-background-dark
+    @apply w-8 h-8 rounded-full border-2 border-background-dark
            cursor-pointer transition-all duration-300
            hover:scale-110 hover:shadow-lg;
     position: relative;
