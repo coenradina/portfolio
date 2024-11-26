@@ -7,7 +7,7 @@
     @apply bg-white text-text scroll-smooth;
   }
   body {
-    @apply bg-white text-dark font-mono;
+    @apply bg-white text-text-dark font-mono;
   }
 }
 
@@ -35,13 +35,13 @@
   
   /* Section Titles */
   .section-title {
-    @apply text-4xl font-regular text-text-dark font-display;
+    @apply text-4xl font-normal text-text-dark font-display;
   }
   
   /* Links */
   .explore-link {
     @apply flex items-center p-4 bg-background-dark rounded-lg 
-           border border-primary hover:border-secondary 
+           border border-primary font-sans hover:border-secondary 
            transition-all duration-200;
   }
   

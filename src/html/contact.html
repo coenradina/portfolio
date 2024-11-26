@@ -8,13 +8,14 @@
     <link href="../../dist/style.css" rel="stylesheet">
     <link href="../css/index.css" rel="stylesheet">
     <link href="../css/animation.css" rel="stylesheet">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Fira+Sans+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
     <title>contact - astrid's space</title>
 </head>
 
 <body class="font-mono bg-white">
-    <header class="h-screen flex flex-col justify-center mx-[10vw]">
+    <header class="h-auto flex-col justify-center mx-[10vw]">
         <nav class="fixed top-6 left-1/2 -translate-x-1/2 bg-dark/80 backdrop-blur-sm z-50 border border-dark-light rounded-full shadow-lg">
             <div class="px-8">
                 <div class="flex h-14 items-center justify-between">
@@ -28,7 +29,7 @@
             </div>
         </nav>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-70vh">
+        <div class="h-70vh mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
             <div class="flex flex-col items-start text-left gap-6">
                 <h1 class="text-6xl font-bold text-primary leading-tight bg-dark p-4 rounded-lg backdrop-blur-sm">
                     Let's Connect
@@ -40,33 +41,126 @@
         </div>
     </header>
 
-    <section id="contact-form" class="py-20 bg-dark">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="p-8 rounded-lg shadow-lg flex flex-col items-center">
-                <h2 class="text-4xl font-bold text-text mb-4 font-display section-title text-center">Get in Touch</h2>
-                <form class="space-y-8 w-full max-w-8xl">
-                    <div class="my-6 flex flex-col">
-                        <label for="name" class="text-text mb-3 font-code">Name</label>
-                        <input type="text" id="name" name="name" class="w-full p-3 bg-dark border border-primary rounded-full focus:border-secondary focus:outline-none transition-colors text-left">
-                    </div>
-                    
-                    <div class="my-6 flex flex-col">
-                        <label for="email" class="text-text mb-3 font-code">Email</label>
-                        <input type="email" id="email" name="email" class="w-full p-3 bg-dark border border-primary rounded-full focus:border-secondary focus:outline-none transition-colors text-left">
-                    </div>
-                    
-                    <div class="my-6 flex flex-col">
-                        <label for="message" class="text-text mb-3 font-code">Message</label>
-                        <textarea id="message" name="message" rows="6" class="w-full p-3 bg-dark border border-primary rounded-lg focus:border-secondary focus:outline-none transition-colors text-left"></textarea>
-                    </div>
-                    
-                    <div class="my-6">
-                        <button type="submit" class="w-2/3 bg-primary text-dark py-3 px-6 rounded-full hover:bg-secondary transition-colors duration-200 font-sans font-bold">Send Message</button>
-                    </div>
-                </form>
-            </div>
+    <!--
+  Heads up! 👋
+
+  Plugins:
+    - @tailwindcss/forms
+-->
+
+<section class="bg-dark">
+    <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5">
+        <div class="lg:col-span-2 lg:py-12">
+          <p class="max-w-xl text-lg">
+            At the same time, the fact that we are wholly owned and totally independent from
+            manufacturer and other group control gives you confidence that we will only recommend what
+            is right for you.
+          </p>
+  
+          <div class="mt-8">
+            <a href="#" class="text-2xl font-bold text-pink-600"> 0151 475 4450 </a>
+  
+            <address class="mt-2 not-italic">282 Kevin Brook, Imogeneborough, CA 58517</address>
+          </div>
         </div>
-    </section>
+  
+        <div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
+          <form action="#" class="space-y-4">
+            <div>
+              <label class="sr-only" for="name">Name</label>
+              <input
+                class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                placeholder="Name"
+                type="text"
+                id="name"
+              />
+            </div>
+  
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label class="sr-only" for="email">Email</label>
+                <input
+                  class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  placeholder="Email address"
+                  type="email"
+                  id="email"
+                />
+              </div>
+  
+              <div>
+                <label class="sr-only" for="phone">Phone</label>
+                <input
+                  class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  placeholder="Phone Number"
+                  type="tel"
+                  id="phone"
+                />
+              </div>
+            </div>
+  
+            <div class="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
+              <div>
+                <label
+                  for="Option1"
+                  class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
+                  tabindex="0"
+                >
+                  <input class="sr-only" id="Option1" type="radio" tabindex="-1" name="option" />
+  
+                  <span class="text-sm"> Option 1 </span>
+                </label>
+              </div>
+  
+              <div>
+                <label
+                  for="Option2"
+                  class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
+                  tabindex="0"
+                >
+                  <input class="sr-only" id="Option2" type="radio" tabindex="-1" name="option" />
+  
+                  <span class="text-sm"> Option 2 </span>
+                </label>
+              </div>
+  
+              <div>
+                <label
+                  for="Option3"
+                  class="block w-full cursor-pointer rounded-lg border border-gray-200 p-3 text-gray-600 hover:border-black has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white"
+                  tabindex="0"
+                >
+                  <input class="sr-only" id="Option3" type="radio" tabindex="-1" name="option" />
+  
+                  <span class="text-sm"> Option 3 </span>
+                </label>
+              </div>
+            </div>
+  
+            <div>
+              <label class="sr-only" for="message">Message</label>
+  
+              <textarea
+                class="w-full rounded-lg border-gray-200 p-3 text-sm"
+                placeholder="Message"
+                rows="8"
+                id="message"
+              ></textarea>
+            </div>
+  
+            <div class="mt-4">
+              <button
+                type="submit"
+                class="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
+              >
+                Send Enquiry
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
     <section class="py-10 bg-dark">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
